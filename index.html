@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Converting JSON Data to HTML Table</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<body>
+
+
+<div class="col s4 ">
+<div class="container blue card">
+  <h2>Input Form</h2>
+</div>
+<form class="container card">
+  <p>
+  <label>Name</label>
+  <input class="input" type="text" id="first_name"></p>
+  <p>
+  <label>Date Of Birth</label>
+  <input class="input" type="text" id="date_of_birth"></p>
+  <p>
+  <label>Email</label>
+  <input class="input" type="text" id="email"></p>
+  
+  <P><button type="button" class="btn blue" id="save">Submit</button>
+<closeform></closeform></form>
+<br>
+<table class="table-all" id="myTable">
+<thead>
+<tr class="blue">
+<th nowrap>Serial No</th>      
+<th nowrap>Name</th>      
+<th nowrap>Date Of Birth</th>
+<th nowrap>Email</th>
+<th nowrap>Action</th>
+<br>
+</tr>
+</thead>
+<tbody >
+</tbody>
+</table>
+<br>
+<br>
+<br>
+</div>
+<script type="text/javascript">
+$('#save').on('click', function() {
+var first_name=$('#first_name').val();
+var date_of_birth=$('#date_of_birth').val();
+var email=$('#email').val();
+var count = $('#myTable tr').length;
+if(first_name!="" && date_of_birth !="" && email!=""){
+$('#myTable tbody').append('<tr class="child"><td>'+count+'</td><td>'+first_name+'</td><td>'+date_of_birth+'</td><td>'+email+'</td><td><a href="javascript:void(0);" class="remCF1 btn btn-small btn-danger">Remove</a></td></tr>');
+}
+});
+$(document).on('click','.remCF1',function(){
+$(this).parent().parent().remove();
+$('#myTable tbody tr').each(function(i){            
+ $($(this).find('td')[0]).html(i+1);          
+});
+});
+</script>
+    <style>
+        th, td, p, input {
+            font:14px Verdana;
+        }
+        table, th, td 
+        {
+            border: solid 1px #DDD;
+            border-collapse: collapse;
+            padding: 2px 3px;
+            text-align: center;
+        }
+        th {
+            font-weight:bold;
+        }
+    </style>
+</head>
+
+<body>    
+
+    <input type="button" onclick="CreateTableFromJSON()" value="Table From JSON" />
+    <p id="showData"></p>
+
+   
+</body>
+
+<script>
+    function CreateTableFromJSON() {
+        var myArray = [
+            {
+                "Serial No": "1",
+                "Name": "Amarjit",
+                "Date of Birth": "01/01/1990",                       
+                "Email": "amarjit@iqvia.com"                               
+            },
+            {
+                "Serial No": "2",
+                "Name": "Abhinav",
+                "Date of Birth": "30/10/1996",                   
+                "Email": "abhinav@iqvia.com"
+            },
+            {
+                "Serial No": "3",
+                "Name": "Alex",
+                "Date of Birth": "12/12/1999",                  
+                "Email": "alex@iqvia.com"                 
+            }
+        ]
+
+        // EXTRACTING VALUE FOR HTML HEADER. 
+        // ('Serial No', 'Name', 'Email' and 'Date of Birth')
+        var col = [];
+        for (var i = 0; i < myArray.length; i++) {
+            for (var key in myArray
+[i]) {
+                if (col.indexOf(key) === -1) {
+                    col.push(key);
+                }
+            }
+        }
+
+        // CREATING DYNAMIC TABLE.
+        var table = document.createElement("table");
+        
+        // HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+
+        var tr = table.insertRow(-1);                   // TABLE ROW.
+
+        for (var i = 0; i < col.length; i++) {
+            var th = document.createElement("th");      // TABLE HEADER.
+            th.innerHTML = col[i];
+            tr.appendChild(th);
+        }
+
+        // ADDING JSON DATA TO THE TABLE AS ROWS.
+        for (var i = 0; i < myArray.length; i++) {
+
+            tr = table.insertRow(-1);
+
+            for (var j = 0; j < col.length; j++) {
+                var tabCell = tr.insertCell(-1);
+                tabCell.innerHTML = myArray
+    [i][col[j]];
+            }
+        }
+
+        // FINALLY ADDING THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+        var divContainer = document.getElementById("showData");
+        divContainer.innerHTML = "";
+        divContainer.appendChild(table);
+    }
+</script>
+</html>
