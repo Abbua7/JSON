@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Converting JSON Data to HTML Table</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
+      th,
+      td,
+      p,
+      input {
+        font: 14px Verdana;
+      }
+      table,
+      th,
+      td {
+        border: solid 1px #ddd;
+        border-collapse: collapse;
+        padding: 2px 3px;
+        text-align: center;
+      }
+      th {
+        font-weight: bold;
+      }
+    </style>
+  </head> 
+
+  <body onload="CreateTableFromJSON()">
+    <div class="col s4">
+      <div class="container blue card">
+        <h2>Input Form</h2>
+      </div>
+      <form class="container card">
+        <p>
+          <label>Name</label>
+          <input class="input" type="text" id="first_name" />
+        </p>
+        <p>
+          <label>Date Of Birth</label>
+          <input class="input" type="text" id="date_of_birth" />
+        </p>
+        <p>
+          <label>Email</label>
+          <input class="input" type="text" id="email" />
+        </p>
+
+        <p><button type="button" class="btn blue" id="save">Submit</button></p>
+        <input type="reset" value="Reset">
+      </form>
+      
+      <br />
+    </div>
+    <p id="showData"></p>
+  </body>
+
+  <script>
+    
+    const data = {
+      cols: ["Serial No.", "Name", "Date Of Birth", "Email", 'Action'],
+      rows: [
+        {
+          serial_no: "1",
+          name: "Amarjit",
+          date_of_birth: "01/01/1990",
+          email: "amarjit@iqvia.com",
+        },
+        {
+          serial_no: "2",
+          name: "Abhinav",
+          date_of_birth: "30/10/1996",
+          email: "abhinav@iqvia.com",
+        },
+        {
+          serial_no: "3",
+          name: "Alex",
+          date_of_birth: "12/12/1999",
+          email: "alex@iqvia.com",
+        },
+      ],
+    };
+        
+    $("#save").on("click", function () {
+      var first_name = $("#first_name").val();
+      var date_of_birth = $("#date_of_birth").val();
+      var email = $("#email").val();
+      //   var count = $("#myTable tr").length;
+
+      if (first_name != "" && date_of_birth != "" && email != "") {
+        // append into the array
+        data.rows.push({
+          serial_no: data.rows.length + 1,
+          name: first_name,
+          date_of_birth,
+          email,
+        });
+
+        CreateTableFromJSON();
+      }
+    });
+
+    function CreateTableFromJSON() {
+      // CREATING DYNAMIC TABLE.
+      let table = document.createElement("table");
+
+      // HTML TABLE HEADER ROW USING THE EXTRACTED HEADERS ABOVE.
+      let tr = table.insertRow(-1); // TABLE ROW.
+
+      for (let i = 0; i < data.cols.length; i++) {
+        var th = document.createElement("th"); // TABLE HEADER.
+        th.innerHTML = data.cols[i];
+        tr.appendChild(th);
+      }
+
+      var th = document.createElement("th"); // TABLE HEADER.
+      tr.appendChild(th);
+
+      // ADDING JSON DATA TO THE TABLE AS ROWS.
+      for (let i = 0; i < data.rows.length; i++) {
+        tr = table.insertRow(-1);
+        let row = data.rows[i];
+        for (let key in row) {
+          let tabCell = tr.insertCell(-1);
+          tabCell.innerHTML = row[key];
+        }
+        
+        let tabCell = tr.insertCell(-1);
+        tabCell.innerHTML = '<input type="button" value="delete" onclick="deleteRow(this)" />';
+      }
+      // FINALLY ADDING THE NEWLY CREATED TABLE WITH JSON DATA TO A CONTAINER.
+      var divContainer = document.getElementById("showData");
+      divContainer.innerHTML = "";
+      divContainer.appendChild(table);
+    }
+    function deleteRow(ele){
+        var rowCount = data.rows.length;
+            if(rowCount <= 1){
+                alert("There is no row available to delete!");
+                return;
+            }
+            if(ele){
+                //delete specific row
+                ele.parentNode.parentNode.remove();
+            }else{
+                //delete last row
+                row.deleteRow(rowCount-1);
+            }
+        }
+    
+  </script>
+</html>
