@@ -29,3 +29,13 @@ Jquery
   function RemoveRow(){
         document.getElementById("table").deleteRow(0);
     }
+
+
+
+
+
+ function RemoveRow() {
+      // event.target will be the input element.
+      var td = event.target.parentNode; 
+      var tr = td.parentNode; // the row to be removed
+      tr.parentNode.removeChild(tr);
