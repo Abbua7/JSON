@@ -86,13 +86,21 @@
       //   var count = $("#myTable tr").length;
 
       if (first_name != "" && date_of_birth != "" && email != "") {
-        // append into the array
-        data.rows.push({
+        let item = {
           serial_no: data.rows.length + 1,
           name: first_name,
           date_of_birth,
           email,
-        });
+        };
+        // append into the array
+        data.rows.push(item);
+
+        // store in local storage
+        let storage = localStorage.getItem("localData");
+        if (storage) storage = JSON.parse(storage);
+        else storage = [];
+        storage.push(item);
+        localStorage.setItem("localData", JSON.stringify(storage));
 
         CreateTableFromJSON();
       }
@@ -131,20 +139,26 @@
       divContainer.innerHTML = "";
       divContainer.appendChild(table);
     }
-    function deleteRow(ele){
-        var rowCount = data.rows.length;
-            if(rowCount <= 1){
-                alert("There is no row available to delete!");
-                return;
-            }
-            if(ele){
-                //delete specific row
-                ele.parentNode.parentNode.remove();
-            }else{
-                //delete last row
-                row.deleteRow(rowCount-1);
-            }
-        }
+    function deleteRow(ele) {
+      var rowCount = data.rows.length;
+      if (rowCount <= 1) {
+        alert("There is no row available to delete!");
+        return;
+      }
+      if (ele) {
+        //delete specific row
+        let row = $(ele).closest("tr");
+        let dataIndex = row.index() - 1;
+
+        // delete html row
+        ele.parentNode.parentNode.remove();
+        // delete data from array
+        data.rows.splice(dataIndex, 1);
+      } else {
+        //delete last row
+        row.deleteRow(rowCount - 1);
+      }
+    }
     
   </script>
 </html>
