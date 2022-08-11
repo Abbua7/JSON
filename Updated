@@ -134,7 +134,7 @@
           let tabCell = tr.insertCell(-1);
           tabCell.innerHTML = row[key];
         }
-
+                  
         let tabCell = tr.insertCell(-1);
         tabCell.innerHTML =
           '<input type="button" value="delete" onclick="deleteRow(this)" />';
